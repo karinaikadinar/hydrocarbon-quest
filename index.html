@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HydroCarbon Quest - Game Kimia Hidrokarbon</title>
+    <style>
+        @font-face {
+            font-family: 'Maiandra GD';
+            src: local('Maiandra GD');
+        }
+        
+        body {
+            font-family: 'Maiandra GD', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff;
+            color: #333;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            color: #3498db;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+        
+        p {
+            font-size: 1.1em;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        
+        .btn {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            font-family: 'Maiandra GD', sans-serif;
+        }
+        
+        .btn:hover {
+            background-color: #2ecc71;
+        }
+        
+        .back-btn {
+            background-color: #e74c3c;
+        }
+        
+        .back-btn:hover {
+            background-color: #c0392b;
+        }
+        
+        .screen {
+            display: none;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        
+        #welcome-screen {
+            display: block;
+        }
+        
+        .world-map {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .region {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .region:hover {
+            transform: translateY(-5px);
+            background-color: #d6eaf8;
+        }
+        
+        .region img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        
+        /* Molecule Puzzle Game */
+        .puzzle-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .puzzle-board {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .atom {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+        
+        .carbon {
+            background-color: #333;
+            color: white;
+        }
+        
+        .hydrogen {
+            background-color: #a7dbf2;
+            color: #333;
+        }
+        
+        .bond {
+            width: 20px;
+            height: 5px;
+            background-color: #666;
+            margin: 0 -2px;
+            align-self: center;
+        }
+        
+        /* Quiz Game */
+        .quiz-container {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .monster {
+            width: 150px;
+            height: 150px;
+            background-color: #8e44ad;
+            border-radius: 15px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5em;
+            position: relative;
+        }
+        
+        .monster-health {
+            width: 100%;
+            height: 10px;
+            background-color: #e74c3c;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            border-radius: 0 0 15px 15px;
+        }
+        
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .quiz-option {
+            background-color: #3498db;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .quiz-option:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Lab Simulation */
+        .lab-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .chemicals {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .chemical {
+            width: 50px;
+            height: 80px;
+            background-color: #3498db;
+            border-radius: 5px 5px 25px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .chemical::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 5px;
+            background-color: #2980b9;
+            border-radius: 5px;
+        }
+        
+        .reaction-result {
+            width: 150px;
+            height: 150px;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        /* Card Game */
+        .card-game {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        
+        .card {
+            width: 150px;
+            height: 200px;
+            background-color: #2980b9;
+            border-radius: 10px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            position: relative;
+        }
+        
+        .card-name {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        .card-image {
+            width: 80px;
+            height: 80px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        .card-stats {
+            width: 100%;
+            font-size: 0.9em;
+            text-align: left;
+        }
+        
+        .card-stat {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+        }
+        
+        .game-result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="welcome-screen" class="screen">
+            <h1>HydroCarbon Quest</h1>
+            <h2>Petualangan di Dunia Kimia Hidrokarbon</h2>
+            <p>Selamat datang di dunia ajaib Hidrokarbon! Di sini kamu akan menjelajahi berbagai wilayah sambil mempelajari struktur dan sifat hidrokarbon dengan cara yang menyenangkan.</p>
+            <p>Kunjungi 4 wilayah berbeda dan selesaikan mini-game di setiap wilayah untuk menjadi ahli kimia organik!</p>
+            <button class="btn" id="start-btn">Mulai Petualangan</button>
+        </div>
+        
+        <div id="world-map" class="screen">
+            <h1>Peta Dunia Hidrokarbon</h1>
+            <p>Pilih wilayah yang ingin kamu kunjungi:</p>
+            <div class="world-map">
+                <div class="region" id="alkana-region">
+                    <h3>Dataran Alkana</h3>
+                    <img src="gambar_alkana.jpeg" widht="400px" height="320"> 
+                    <p>Tempat struktur molekul hidrokarbon berantai tunggal.</p>
+                    <small>Mini-game: Teka-teki Struktur Molekul</small>
+                </div>
+                <div class="region" id="alkena-region">
+                    <h3>Bukit Alkena</h3>
+                    <img src="gambar_alkena.jpeg" widht="400px" height="320">
+                    <p>Wilayah hidrokarbon dengan ikatan rangkap dua.</p>
+                    <small>Mini-game: Mode Pertarungan Quiz</small>
+                </div>
+                <div class="region" id="alkuna-region">
+                    <h3>Gua Alkuna</h3>
+                    <img src="gambar_alkuna.jpeg">
+                    <p>Tempat tersembunyi hidrokarbon dengan ikatan rangkap tiga.</p>
+                    <small>Mini-game: Laboratorium Simulasi Reaksi</small>
+                </div>
+                <div class="region" id="benzena-region">
+                    <h3>Kota Benzena</h3>
+                    <img src="gambar_benzena.jpeg">
+                    <p>Pusat perdagangan dengan struktur molekul cincin.</p>
+                    <small>Mini-game: Permainan Kartu Molekul VS Molekul</small>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Teka-teki Struktur Molekul -->
+        <div id="puzzle-game" class="screen">
+            <h1>Teka-teki Struktur Molekul</h1>
+            <p>Susun struktur molekul propana dengan tepat!</p>
+            <div class="puzzle-container">
+                <div class="puzzle-board">
+                    <div class="atom hydrogen" data-atom="H">H</div>
+                    <div class="bond"></div>
+                    <div class="atom carbon" data-atom="C">C</div>
+                    <div class="bond"></div>
+                    <div class="atom carbon" data-atom="C">C</div>
+                    <div class="bond"></div>
+                    <div class="atom carbon" data-atom="C">C</div>
+                    <div class="bond"></div>
+                    <div class="atom hydrogen" data-atom="H">H</div>
+                </div>
+                <p>Struktur rantai utama propana sudah tersusun.</p>
+                <p>Tambahkan atom H yang tersisa dengan klik tombol di bawah.</p>
+                <button class="btn" id="add-hydrogen">Tambah Atom H</button>
+                <div id="puzzle-message"></div>
+            </div>
+            <button class="btn back-btn" id="puzzle-back">Kembali ke Peta</button>
+        </div>
+        
+        <!-- Mode Pertarungan Quiz -->
+        <div id="quiz-game" class="screen">
+            <h1>Mode Pertarungan Quiz</h1>
+            <p>Lawan monster dengan menjawab pertanyaan kimia!</p>
+            <div class="quiz-container">
+                <div class="monster">
+                    Eter Monster
+                    <div class="monster-health" id="monster-health"></div>
+                </div>
+                <div id="quiz-question">Ikatan pada alkena bersifat?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" data-correct="true">Tidak jenuh</div>
+                    <div class="quiz-option" data-correct="false">Jenuh</div>
+                    <div class="quiz-option" data-correct="false">Aromatik</div>
+                    <div class="quiz-option" data-correct="false">Polar</div>
+                </div>
+                <div id="quiz-question">Apa rumus umum untuk Alkena?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" data-correct="false">CnH2n+2</div>
+                    <div class="quiz-option" data-correct="true">CnH2n</div>
+                    <div class="quiz-option" data-correct="false">CnH2n-2</div>
+                    <div class="quiz-option" data-correct="false">CnHn</div>
+                </div>
+                <div id="quiz-message"></div>
+            </div>
+            <button class="btn back-btn" id="quiz-back">Kembali ke Peta</button>
+        </div>
+        
+        <!-- Laboratorium Simulasi Reaksi -->
+        <div id="lab-game" class="screen">
+            <h1>Laboratorium Simulasi Reaksi</h1>
+            <p>Campur senyawa kimia untuk melihat hasil reaksi!</p>
+            <div class="lab-container">
+                <div class="chemicals">
+                    <div class="chemical" data-chemical="C2H4">C2H4</div>
+                    <div class="chemical" data-chemical="H2">H2</div>
+                    <div class="chemical" data-chemical="Br2">Br2</div>
+                    <div class="chemical" data-chemical="H2O">H2O</div>
+                </div>
+                <p>Pilih dua bahan kimia untuk direaksikan:</p>
+                <div id="selected-chemicals">Belum ada bahan kimia yang dipilih</div>
+                <button class="btn" id="react-btn" disabled>Reaksikan</button>
+                <div class="reaction-result" id="reaction-result">
+                    Hasil reaksi akan muncul di sini
+                </div>
+                <div id="reaction-explanation"></div>
+            </div>
+            <button class="btn back-btn" id="lab-back">Kembali ke Peta</button>
+        </div>
+        
+        <!-- Permainan Kartu Molekul VS Molekul -->
+        <div id="card-game" class="screen">
+            <h1>Permainan Kartu Molekul VS Molekul</h1>
+            <p>Duel kartu dengan properti molekul!</p>
+            <div class="card-game">
+                <div class="card" id="player-card">
+                    <div class="card-name">Metana (CH4)</div>
+                    <div class="card-image">CH4</div>
+                    <div class="card-stats">
+                        <div class="card-stat">
+                            <span>Titik Didih:</span>
+                            <span>-162°C</span>
+                        </div>
+                        <div class="card-stat">
+                            <span>Berat Molekul:</span>
+                            <span>16 g/mol</span>
+                        </div>
+                        <div class="card-stat">
+                            <span>Reaktivitas:</span>
+                            <span>3/10</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" id="opponent-card">
+                    <div class="card-name">???</div>
+                    <div class="card-image">?</div>
+                    <div class="card-stats">
+                        <div class="card-stat">
+                            <span>Titik Didih:</span>
+                            <span>?</span>
+                        </div>
+                        <div class="card-stat">
+                            <span>Berat Molekul:</span>
+                            <span>?</span>
+                        </div>
+                        <div class="card-stat">
+                            <span>Reaktivitas:</span>
+                            <span>?</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" id="play-card">Mainkan Kartu</button>
+            <div class="game-result" id="card-result"></div>
+            <button class="btn back-btn" id="card-back">Kembali ke Peta</button>
+        </div>
+    </div>
+
+    <script>
+        // Main navigation
+        document.getElementById('start-btn').addEventListener('click', function() {
+            document.getElementById('welcome-screen').style.display = 'none';
+            document.getElementById('world-map').style.display = 'block';
+        });
+        
+        // Region navigation
+        document.getElementById('alkana-region').addEventListener('click', function() {
+            document.getElementById('world-map').style.display = 'none';
+            document.getElementById('puzzle-game').style.display = 'block';
+        });
+        
+        document.getElementById('alkena-region').addEventListener('click', function() {
+            document.getElementById('world-map').style.display = 'none';
+            document.getElementById('quiz-game').style.display = 'block';
+            resetMonsterHealth();
+        });
+        
+        document.getElementById('alkuna-region').addEventListener('click', function() {
+            document.getElementById('world-map').style.display = 'none';
+            document.getElementById('lab-game').style.display = 'block';
+        });
+        
+        document.getElementById('benzena-region').addEventListener('click', function() {
+            document.getElementById('world-map').style.display = 'none';
+            document.getElementById('card-game').style.display = 'block';
+        });
+        
+        // Back buttons
+        document.getElementById('puzzle-back').addEventListener('click', backToMap);
+        document.getElementById('quiz-back').addEventListener('click', backToMap);
+        document.getElementById('lab-back').addEventListener('click', backToMap);
+        document.getElementById('card-back').addEventListener('click', backToMap);
+        
+        function backToMap() {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.style.display = 'none';
+            });
+            document.getElementById('world-map').style.display = 'block';
+        }
+        
+        // Puzzle Game Logic
+        let hydrogenCount = 0;
+        document.getElementById('add-hydrogen').addEventListener('click', function() {
+            hydrogenCount++;
+            const message = document.getElementById('puzzle-message');
+            
+            if (hydrogenCount < 8) {
+                message.textContent = `Bagus! Kamu telah menambahkan ${hydrogenCount} atom H. Masih perlu ${8-hydrogenCount} atom H lagi.`;
+            } else {
+                message.innerHTML = "<strong>Selamat!</strong> Kamu telah berhasil menyusun struktur molekul propana (C3H8).<br>C3H8 adalah senyawa alkana dengan 3 atom karbon dan 8 atom hidrogen.";
+                document.getElementById('add-hydrogen').disabled = true;
+            }
+        });
+        
+        // Quiz Game Logic
+        const quizOptions = document.querySelectorAll('.quiz-option');
+        let monsterHealth = 100;
+        
+        function resetMonsterHealth() {
+            monsterHealth = 100;
+            document.getElementById('monster-health').style.width = '100%';
+        }
+        
+        quizOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const isCorrect = this.getAttribute('data-correct') === 'true';
+                const message = document.getElementById('quiz-message');
+                
+                if (isCorrect) {
+                    monsterHealth -= 50;
+                    document.getElementById('monster-health').style.width = monsterHealth + '%';
+                    message.textContent = "Benar! Monster terluka!";
+                    
+                    if (monsterHealth <= 0) {
+                        message.innerHTML = "<strong>Selamat!</strong> Kamu telah mengalahkan monster!";
+                        quizOptions.forEach(opt => opt.style.pointerEvents = 'none');
+                    }
+                } else {
+                    message.textContent = "Jawaban salah! Coba lagi.";
+                }
+            });
+        });
+        
+        // Lab Game Logic
+        const chemicals = document.querySelectorAll('.chemical');
+        const selectedChemicals = [];
+        
+        chemicals.forEach(chemical => {
+            chemical.addEventListener('click', function() {
+                const chemicalName = this.getAttribute('data-chemical');
+                
+                if (selectedChemicals.includes(chemicalName)) {
+                    // Remove from selection
+                    const index = selectedChemicals.indexOf(chemicalName);
+                    selectedChemicals.splice(index, 1);
+                } else {
+                    // Add to selection if less than 2 are selected
+                    if (selectedChemicals.length < 2) {
+                        selectedChemicals.push(chemicalName);
+                    }
+                }
+                
+                updateSelectedChemicals();
+            });
+        });
+        
+        function updateSelectedChemicals() {
+            const display = document.getElementById('selected-chemicals');
+            const reactBtn = document.getElementById('react-btn');
+            
+            if (selectedChemicals.length === 0) {
+                display.textContent = "Belum ada bahan kimia yang dipilih";
+                reactBtn.disabled = true;
+            } else {
+                display.textContent = selectedChemicals.join(" + ");
+                reactBtn.disabled = selectedChemicals.length !== 2;
+            }
+        }
+        
+        document.getElementById('react-btn').addEventListener('click', function() {
+            const result = document.getElementById('reaction-result');
+            const explanation = document.getElementById('reaction-explanation');
+            
+            // Sort for consistent comparison
+            const reaction = [...selectedChemicals].sort().join("+");
+            
+            switch(reaction) {
+                case "Br2+C2H4":
+                    result.textContent = "C2H4Br2";
+                    explanation.textContent = "Reaksi adisi: Etena + Bromin → Dibromoetana";
+                    break;
+                case "C2H4+H2":
+                    result.textContent = "C2H6";
+                    explanation.textContent = "Reaksi hidrogenasi: Etena + Hidrogen → Etana";
+                    break;
+                case "C2H4+H2O":
+                    result.textContent = "C2H5OH";
+                    explanation.textContent = "Reaksi hidrasi: Etena + Air → Etanol";
+                    break;
+                case "Br2+H2":
+                    result.textContent = "2HBr";
+                    explanation.textContent = "Reaksi redoks: Bromin + Hidrogen → Hidrogen Bromida";
+                    break;
+                default:
+                    result.textContent = "Tidak ada reaksi";
+                    explanation.textContent = "Kedua bahan kimia ini tidak bereaksi dalam kondisi normal.";
+            }
+            
+            // Reset selection
+            selectedChemicals.length = 0;
+            updateSelectedChemicals();
+        });
+        
+        // Card Game Logic
+        const opponentCards = [
+            {
+                name: "Etana (C2H6)",
+                formula: "C2H6",
+                boilingPoint: -89,
+                molecularWeight: 30,
+                reactivity: 4
+            },
+            {
+                name: "Propana (C3H8)",
+                formula: "C3H8",
+                boilingPoint: -42,
+                molecularWeight: 44,
+                reactivity: 5
+            },
+            {
+                name: "Etena (C2H4)",
+                formula: "C2H4",
+                boilingPoint: -104,
+                molecularWeight: 28,
+                reactivity: 7
+            }
+        ];
+        
+        document.getElementById('play-card').addEventListener('click', function() {
+            // Choose random opponent card
+            const opponentCard = opponentCards[Math.floor(Math.random() * opponentCards.length)];
+            
+            // Update opponent card display
+            document.querySelector('#opponent-card .card-name').textContent = opponentCard.name;
+            document.querySelector('#opponent-card .card-image').textContent = opponentCard.formula;
+            document.querySelector('#opponent-card .card-stat:nth-child(1) span:nth-child(2)').textContent = opponentCard.boilingPoint + "°C";
+            document.querySelector('#opponent-card .card-stat:nth-child(2) span:nth-child(2)').textContent = opponentCard.molecularWeight + " g/mol";
+            document.querySelector('#opponent-card .card-stat:nth-child(3) span:nth-child(2)').textContent = opponentCard.reactivity + "/10";
+            
+            // Compare cards
+            const playerReactivity = 3; // Metana reactivity
+            const result = document.getElementById('card-result');
+            
+            if (playerReactivity > opponentCard.reactivity) {
+                result.textContent = "Kamu menang! Kartu Metana lebih stabil.";
+            } else if (playerReactivity < opponentCard.reactivity) {
+                result.textContent = "Kamu kalah! Kartu " + opponentCard.name + " lebih reaktif.";
+            } else {
+                result.textContent = "Seri! Kedua kartu sama reaktifnya.";
+            }
+            
+            // Disable play button
+            document.getElementById('play-card').disabled = true;
+            
+            // Reset after 3 seconds
+            setTimeout(function() {
+                // Reset opponent card
+                document.querySelector('#opponent-card .card-name').textContent = "???";
+                document.querySelector('#opponent-card .card-image').textContent = "?";
+                document.querySelector('#opponent-card .card-stat:nth-child(1) span:nth-child(2)').textContent = "?";
+                document.querySelector('#opponent-card .card-stat:nth-child(2) span:nth-child(2)').textContent = "?";
+                document.querySelector('#opponent-card .card-stat:nth-child(3) span:nth-child(2)').textContent = "?";
+                
+                // Reset result
+                result.textContent = "";
+                
+                // Re-enable play button
+                document.getElementById('play-card').disabled = false;
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
